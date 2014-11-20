@@ -18,6 +18,7 @@ public class App
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
+        // testing git
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         UserService userService = (UserService) context.getBean("userService");
         User2Service user2Service = (User2Service) context.getBean("user2Service");
