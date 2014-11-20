@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.ti.tmg.tiloader.repository2.User2Dao">
+    <cache/>
+    
+    <resultMap id="userMap" type="com.ti.tmg.tiloader.domain.User">
+        <id property="id" column="id"/>        
+        <result property="firstName" column="firstName"/>
+        <result property="lastName" column="lastName"/>
+        <result property="userId" column="userId"/>  
+        <result property="password" column="password"/>        
+    </resultMap>
+    
+    <select id="getAllUsers" resultMap="userMap">
+        select id,firstName,lastName,userId,password
+        from tbl_user 
+    </select>
+    
+    
+    <insert id="insertUser" parameterType="map">
+        INSERT INTO tbl_user (firstName, lastName, userId, password)
+        values (#{firstName}, #{lastName}, #{userId}, #{password})
+    </insert>    
+   
+</mapper>

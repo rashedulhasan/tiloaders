@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:oxm="http://www.springframework.org/schema/oxm"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        classpath:org/springframework/beans/factory/xml/spring-beans-3.2.xsd  	
+  	http://www.springframework.org/schema/context
+  	classpath:org/springframework/context/config/spring-context-3.2.xsd
+  	http://www.springframework.org/schema/tx
+  	classpath:org/springframework/transaction/config/spring-tx-3.2.xsd
+  	http://www.springframework.org/schema/aop
+  	classpath:org/springframework/aop/config/spring-aop-3.2.xsd
+        http://www.springframework.org/schema/oxm
+        classpath:org/springframework/oxm/config/spring-oxm-3.2.xsd  	
+  	http://www.springframework.org/schema/jdbc
+        classpath:org/springframework/jdbc/config/spring-jdbc-3.2.xsd">
+    <context:component-scan base-package="com.ti.tmg.tiloader"/>
+    <context:annotation-config />
+    <!--     <mvc:annotation-driven/>-->
+    <tx:annotation-driven />
+
+  
+    <!-- bean id="dataSource"	class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+       <property name="driverClassName" value="oracle.jdbc.OracleDriver" />  
+       <property name="url" value="jdbc:oracle:thin:@//ipaddress:1592/database" />  
+       <property name="username" value="" />  
+       <property name="password" value ="" />   
+    </bean -->
+    <bean id="dataSource"
+          class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName">
+            <value>oracle.jdbc.driver.OracleDriver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:oracle:thin:root/root@localhost:1521:xe</value>
+        </property>
+        <property name="username">
+            <value>root</value>
+        </property>
+        <property name="password">
+            <value>root</value>
+        </property>
+        <property name="validationQuery" value="select 1 from dual" />
+    </bean>
+    
+    <!--    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />  
+        <property name="url" value="jdbc:mysql://localhost:3306/ti" />  
+        <property name="username" value="root" />  
+        <property name="password" value ="root" /> 
+    </bean>-->
+    
+    <!-- Scan the classpath and set up mappers as MapperFactoryBeans -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ti.tmg.tiloader.repository" />
+        <property name="sqlSessionFactoryBeanName" value="ceSqlSessionFactory" />       
+    </bean>
+    <!-- Creates the main myBatis bean that will handle interactions with our datasource -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" name="ceSqlSessionFactory">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configurationProperties">
+            <props>
+                <prop key="cacheEnabled">true</prop>
+                <prop key="useGeneratedKeys">false</prop>
+                <prop key="defaultExecutorType">REUSE</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <!--    <bean id="dataSourceXY" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />  
+        <property name="url" value="jdbc:mysql://localhost:3306/ti" />  
+        <property name="username" value="root" />  
+        <property name="password" value ="root" /> 
+    </bean>-->
+    <bean id="dataSourceXY"
+          class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName">
+            <value>oracle.jdbc.driver.OracleDriver</value>
+        </property>
+        <property name="url">
+            <value>jdbc:oracle:thin:root/root@localhost:1521:xe</value>
+        </property>
+        <property name="username">
+            <value>root</value>
+        </property>
+        <property name="password">
+            <value>root</value>
+        </property>
+        <property name="validationQuery" value="select 1 from dual" />
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ti.tmg.tiloader.repository2" />
+        <property name="sqlSessionFactoryBeanName" value="exSqlSessionFactory" />        
+    </bean>
+    
+    <bean id="sqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean" name="exSqlSessionFactory">
+        <property name="dataSource" ref="dataSourceXY" />
+        <property name="configurationProperties">
+            <props>
+                <prop key="cacheEnabled">true</prop>
+                <prop key="useGeneratedKeys">false</prop>
+                <prop key="defaultExecutorType">REUSE</prop>
+            </props>
+        </property>
+    </bean>
+    <!--    <bean id="dataSource"
+        class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close">
+            <property name="driverClassName">
+                <value>${jdbc.driverClassName}</value>
+            </property>
+            <property name="url">
+                <value>${jdbc.url}</value></property>
+            <property name="username"><value>${jdbc.username}</value></property>
+            <property name="password"><value>${jdbc.password}</value></property>
+            <property name="validationQuery" value="select 1 from dual" />
+    </bean>-->
+    
+    <!--    <jdbc:embedded-database id="dataSource" type="H2" >
+        <jdbc:script location="classpath:schema.sql"/>
+        <jdbc:script location="classpath:test-data.sql"/>
+    </jdbc:embedded-database>-->
+    
+    
+    <!--    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+    </bean>--> 
+    
+    <!-- *********************** -->
+  
+    
+   
+
+   
+    
+    <!--    <bean id="mapper" class="org.mybatis.spring.mapper.MapperFactoryBean" >
+        <property name="mapperInterface" value="com.hmkcode.spring.mybatis.mapper.Mapper" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>-->
+    <!-- *********************** -->
+  
+    <!--    <bean id="service" class="com.hmkcode.spring.mybatis.service.Service" />-->
+    
+</beans>
